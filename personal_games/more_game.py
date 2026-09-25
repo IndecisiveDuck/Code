@@ -26,17 +26,20 @@ class item:
 rat_enemy = enemy("Rat", {1: "Bite"}, {1: 2}, 20, 5)
 current_enemies = [rat_enemy, rat_enemy]
 
-def attack_window():
+def attack_window(enemy_index):
+    print(enemy_index)
     fighting_window = Toplevel(root)
     fighting_window.title("fighting Window")
-    for index, enemies in enumerate(current_enemies):
-        display_text = f"{enemies.type}"
-        tk.Radiobutton(fighting_window, text=display_text, value=index).pack(anchor=tk.W)
+
 
 root = tk.Tk()
 root.geometry("300x200")  # Set window size
 root.title("Main Window")
-startFightButton = tk.Button(root, text='Fight', command=attack_window)
+selected_enemy = tk.IntVar(value = 0)
+for index, enemies in enumerate(current_enemies):
+    display_text = f"{enemies.type}"
+    tk.Radiobutton(root, text=display_text, value=index, variable=selected_enemy).pack(anchor=tk.W)
+startFightButton = tk.Button(root, text='Fight', command=lambda: attack_window(selected_enemy.get()))
 startFightButton.pack()
 
 
