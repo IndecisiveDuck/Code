@@ -5,17 +5,19 @@ from tkinter.ttk import *
 
 class enemy:
 
-    def __init__(self, type, attack_name, attack_dmg, health, armor):
+    def __init__(self, type, attack_name, attack_dmg, max_health, health, armor):
         self.type = type
         self.attack_name = attack_name
         self.attack_dmg = attack_dmg
+        self.max_health = max_health
         self.health = health
         self.armor = armor
 
 class player:
-    def __init__(self, attack_name, attack_dmg, health, armor):
+    def __init__(self, attack_name, attack_dmg, max_health, health, armor):
         self.attack_name = attack_name
         self.attack_dmg = attack_dmg
+        self.max_health = max_health
         self.health = health
         self.armor = armor
 
@@ -26,9 +28,9 @@ class item:
 
 
 
-rat_enemy = enemy("Rat", {1: "Bite"}, {1: 2}, 20, 5)
+rat_enemy = enemy("Rat", {1: "Bite"}, {1: 2}, 20, 20, 5)
 current_enemies = [rat_enemy, rat_enemy]
-player_mc = player({1:"Swat", 2:"Punt"}, {1: 1, 2: 5}, 20, 9)
+player_mc = player({1:"Swat", 2:"Punt"}, {1: 1, 2: 5}, 20, 10, 9)
 
 def attack_window(enemy_index):
 
@@ -71,9 +73,12 @@ startFightButton = tk.Button(root, text='Fight', command=lambda:
                              [attack_window(selected_enemy.get()), startFightButton.config(state='disabled')])
 startFightButton.pack()
 
-healthbar_window = Toplevel(root)
-healthbar_scale = tk.Scale(healthbar_window, from_=0, to=player_mc.health, troughcolor="black", orient="horizontal", )
-healthbar_scale.pack()
+health_window = Toplevel(root)
+health_window.title("Health Bar")
+tk.Label(health_window, text="Health").pack()
+h_count = player_mc.health / player_mc.max_health
+h_text = '#'*int(h_count*20)
+health_display = tk.Label(health_window, text=h_text).pack()
 
 
 
