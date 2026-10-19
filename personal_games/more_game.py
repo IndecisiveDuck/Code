@@ -28,7 +28,15 @@ class item:
         pass
 
 
-
+def update_healthbar():
+    health_display = tk.Label(health_window)
+    health_display.destroy()
+    #health bar where the player heath is devided by max health and displayed as 20 hashtags
+    h_count = (player_mc.health / player_mc.max_health)
+    h_text = '#'*int(h_count*20)
+    d_text = '-'*(20-int(h_count*20))
+    health_display = tk.Label(health_window, text=f"{h_text}{d_text}")
+    health_display.pack()
 
 current_enemies = [enemy("Rat", {1: "Bite"}, {1: 10},9, 20, 20, 0), 
                    enemy("Rat", {1: "Bite"}, {1: 10},9, 20, 20, 0)]
@@ -41,6 +49,7 @@ def being_attacked_window():
             pick_attack = random.randint(1, len(current_enemies[i].attack_name))
             attacked_for = enemy.attack_dmg[pick_attack] - player_mc.armor
             player_mc.health -= attacked_for
+            update_healthbar()
             return f"{enemy.type} attacked you for {attacked_for}"
 
 def attack_window(enemy_index):
@@ -57,11 +66,11 @@ def attack_window(enemy_index):
         else:
             tk.Label(fighting_window, text=f"You missed with your {player_mc.attack_name[attack_index]}").pack()
 
-        for btn in attack_buttons:
-            btn.config(state='disabled')
+        # for btn in attack_buttons:
+        #     btn.config(state='disabled')
 
         attcked_text = tk.Label(fighting_window, text= being_attacked_window()).pack()
-        tk.Button(fighting_window, text="Exit", command=lambda: [fighting_window.destroy(), startFightButton.config(state="active")]).pack()
+        tk.Button(fighting_window, text="Change target", command=lambda: [fighting_window.destroy(), startFightButton.config(state="active")]).pack()
 
         
     targeted_enemy = current_enemies[enemy_index]
@@ -69,11 +78,12 @@ def attack_window(enemy_index):
     fighting_window = Toplevel(root)
     fighting_window.title("fighting Window")
     fighting_window.minsize(200, 100)
-    #buttons list
+    #Stores the buttons into an array so that once one of them is pressed, 
+    # all the buttons get locked. Might change later.
     attack_buttons = []
     for i, attacks in enumerate(player_mc.attack_name.items()):
-        attack_buttons.append(tk.Button(fighting_window, text=attacks, 
-                          command=lambda: attacking_enemy(i, targeted_enemy, enemy_index)))
+        attack_buttons.append(tk.Button(fighting_window, text=attacks[1], 
+                          command=lambda val = attacks[0]: attacking_enemy(val, targeted_enemy, enemy_index)))
         attack_buttons[i].pack()
 
 
@@ -93,11 +103,8 @@ startFightButton.pack()
 health_window = Toplevel(root)
 health_window.title("Health Bar")
 tk.Label(health_window, text="Health").pack()
-#health bar where the player heath is devided by max health and displayed as 20 hashtags
-h_count = (player_mc.health / player_mc.max_health)
-h_text = '#'*int(h_count*20)
-d_text = '-'*(20-int(h_count*20))
-health_display = tk.Label(health_window, text=f"{h_text}{d_text}").pack()
+health_display = tk.Label(health_window)
+update_healthbar()
 
 
 
