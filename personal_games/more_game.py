@@ -27,17 +27,31 @@ class item:
     def __init__(self, name, type, ability, ):
         pass
 
+
+def update_healthbar():
+    #health bar where the player heath is devided by max health and displayed as 20 hashtags
+    h_count = (player_mc.health / player_mc.max_health)
+    h_text = '#'*int(h_count*20)
+    d_text = '-'*(20-int(h_count*20))
+    health_display.config(text=f"{h_text}{d_text}")
+
 current_enemies = [enemy("Rat", {1: "Bite"}, {1: 10},9, 20, 20, 0), 
                    enemy("Rat", {1: "Bite"}, {1: 10},9, 20, 20, 0)]
 player_mc = player({1:"Swat", 2:"Punt"}, {1: 1, 2: 5}, 5, 20, 20, 9)
 
 def being_attacked_window() -> str:
+    """This is where the player takes damage.
+
+    Returns:
+        str: _description_
+    """
     for i, enemy in enumerate(current_enemies):
         roll_to_hit = random.randint(1, 20)
         pick_attack = random.randint(1, len(current_enemies[i].attack_name))
         if roll_to_hit > enemy.accuracy:
             attacked_for = enemy.attack_dmg[pick_attack] - player_mc.armor
             player_mc.health -= attacked_for
+            update_healthbar()
             return f"{enemy.type} attacked you for {attacked_for}"
         else:
             return f"{enemy.type} attacked you with {pick_attack} but missed"
@@ -48,7 +62,7 @@ def attack_window(enemy_index):
     Args:
         enemy_index (int): The location of the enemy in relation to the current_enemies arrays
     """
-    def attacking_enemy(attack_index, targeted_enemy, enemy_index):
+    def attacking_enemy(attack_index: int, targeted_enemy: enemy, enemy_index:int):
         """Attacks the targeted enemy and then calls the being attacked function
 
         Args:
@@ -94,24 +108,23 @@ def main():
     root = tk.Tk()
     root.geometry("300x200+500+0")  # Set window size
     root.title("Main Window")
+    # shared value
     selected_enemy = tk.IntVar(value = 0)
     for index, enemies in enumerate(current_enemies):
         #radio buttons to select a enemy to attack 
         display_text = f"{enemies.type}"
-        tk.Radiobutton(root, text=display_text, value=index, variable=selected_enemy).pack(anchor=tk.W,side=LEFT)
+        tk.Radiobutton(root, text=display_text, value=index, variable=selected_enemy).pack(side="left")
     startFightButton = tk.Button(root, text='Fight', command=lambda: 
-                             [attack_window(selected_enemy.get()), startFightButton.config(state='disabled')])
+                                [attack_window(selected_enemy.get()), startFightButton.config(state='disabled')])
     startFightButton.pack()
 
     #Setting up the heath window
-    health_window = Toplevel(root).title("Health Bar")
-    tk.Label(health_window, text="Your Health").pack()
+    health_window = Toplevel(root)
+    health_window.title("Health Bar")
+    tk.Label(health_window, text="Health").pack()
+    global health_display
     health_display = tk.Label(health_window)
-    #health bar where the player heath is devided by max health and displayed as 20 hashtags
-    h_count = (player_mc.health / player_mc.max_health)
-    h_text = '#'*int(h_count*20)
-    d_text = '-'*(20-int(h_count*20))
-    health_display.config(text=f"{h_text}{d_text}")
     health_display.pack()
+    update_healthbar()
     root.mainloop()
 main()
