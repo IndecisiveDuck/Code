@@ -15,7 +15,7 @@ class enemy:
         self.armor = armor
 
 class player:
-    def __init__(self, attack_name, attack_dmg, min_accuracy, max_health, health, armor):
+    def __init__(self, attack_name:dict, attack_dmg:dict, min_accuracy:int, max_health:int, health:int, armor:int):
         self.attack_name = attack_name
         self.attack_dmg = attack_dmg
         self.min_accuracy = min_accuracy
@@ -105,6 +105,7 @@ def attack_window(enemy_index):
 
 def main():
     #Main window where the player will choose what enemy they want to fight
+    global root
     root = tk.Tk()
     root.geometry("300x200+500+0")  # Set window size
     root.title("Main Window")

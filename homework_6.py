@@ -14,30 +14,30 @@ import random
 # allowed to make an invalid move! If you have the first move, there is a strategy you can use 
 # so that you will (almost) never lose. See if you can figure it out! Here is a sample run of me 
 # playing against the computer:
-# marble_piles = random.randint(10, 100)
-# star = random.randint(0,1)
-# while marble_piles > 1:
-#     print(f"{marble_piles} marbles remaining...")
-#     while not star == 1:
-#         player_takes = input("How many marbles would you like to take? ")
-#         if not player_takes.isdigit() or int(player_takes) < 1 or int(player_takes) > marble_piles//2:
-#             print("Invalid move, please choose a value betewen 1 and "+str(marble_piles//2))
-#         else:
-#             player_takes = int(player_takes)
-#             marble_piles -= player_takes
-#             star = 1
-#     if marble_piles == 1:
-#         print("You won!")
-#         break
-#     elif star == 0:
-#         print(f"{marble_piles} marbles remaining...")
-#     computer_takes = random.randint(1, marble_piles//2)
-#     marble_piles -= computer_takes
-#     print(f"Computer takes {computer_takes} marbles")
-#     if marble_piles == 1:
-#         print("You lose")
-#         break
-#     star = 0
+marble_piles = random.randint(10, 100)
+star = random.randint(0,1)
+while marble_piles > 1:
+    print(f"{marble_piles} marbles remaining...")
+    while not star == 1:
+        player_takes = input("How many marbles would you like to take? ")
+        if not player_takes.isdigit() or int(player_takes) < 1 or int(player_takes) > marble_piles//2:
+            print("Invalid move, please choose a value betewen 1 and "+str(marble_piles//2))
+        else:
+            player_takes = int(player_takes)
+            marble_piles -= player_takes
+            star = 1
+    if marble_piles == 1:
+        print("You won!")
+        break
+    elif star == 0:
+        print(f"{marble_piles} marbles remaining...")
+    computer_takes = random.randint(1, marble_piles//2)
+    marble_piles -= computer_takes
+    print(f"Computer takes {computer_takes} marbles")
+    if marble_piles == 1:
+        print("You lose")
+        break
+    star = 0
 
 
 #retirement
