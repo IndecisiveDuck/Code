@@ -39,22 +39,7 @@ current_enemies = [enemy("Rat", {1: "Bite"}, {1: 10},9, 20, 20, 0),
                    enemy("Rat", {1: "Bite"}, {1: 10},9, 20, 20, 0)]
 player_mc = player({1:"Swat", 2:"Punt"}, {1: 1, 2: 5}, 5, 20, 20, 9)
 
-def being_attacked_window() -> str:
-    """This is where the player takes damage.
 
-    Returns:
-        str: _description_
-    """
-    for i, enemy in enumerate(current_enemies):
-        roll_to_hit = random.randint(1, 20)
-        pick_attack = random.randint(1, len(current_enemies[i].attack_name))
-        if roll_to_hit > enemy.accuracy:
-            attacked_for = enemy.attack_dmg[pick_attack] - player_mc.armor
-            player_mc.health -= attacked_for
-            update_healthbar()
-            return f"{enemy.type} attacked you for {attacked_for}"
-        else:
-            return f"{enemy.type} attacked you with {pick_attack} but missed"
 
 def attack_window(enemy_index):
     """Creates a window where the player's available attacks are displayed
@@ -95,10 +80,14 @@ def attack_window(enemy_index):
 
     #Stores the buttons into an array so, if apliable, the buttons can all be locked or unlocked
     attack_buttons = []
+
+
     for i, attacks in enumerate(player_mc.attack_name.items()):
         attack_buttons.append(tk.Button(fighting_window, text=attacks[1], 
                           command=lambda val = attacks[0]: attacking_enemy(val, targeted_enemy, enemy_index)))
         attack_buttons[i].pack()
+
+
 
     tk.Button(fighting_window, text="Change target", command=lambda: 
               [fighting_window.destroy(), startFightButton.config(state="active")]).pack()
