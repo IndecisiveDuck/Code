@@ -126,8 +126,8 @@ class attackWindow:
 def main():
     root = tk.Tk()
     window = mainWindow(root)
-    
-    health = heathbarWindow.create_window(root)
+    heathbar = heathbarWindow()
+    health = heathbar.create_window(root)
     root.mainloop()
 
 main()
