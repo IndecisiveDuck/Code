@@ -26,7 +26,7 @@ def won_rows(board: list[list[str]], marker: str) -> bool:
     Returns:
     bool: True if this marker has filled one of the rows, False otherwise.
     """
-    for i in range(BOARD_SIZE-1):
+    for i in range(BOARD_SIZE):
         if board[i] == [marker]*BOARD_SIZE:
             return True
     return False

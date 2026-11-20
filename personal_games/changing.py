@@ -34,8 +34,8 @@ class heathbarWindow:
         self.health_window = Toplevel(window)
         self.health_window.title("Health Bar")
         tk.Label(self.health_window, text="Health").pack()
-        self.health_display = tk.Label(self.health_window)
-        self.health_display.pack()
+        heathbarWindow.health_display = tk.Label(self.health_window)
+        heathbarWindow.health_display.pack()
         self.update_healthbar()
 
     def update_healthbar(self):
@@ -43,7 +43,7 @@ class heathbarWindow:
         h_count = (player_mc.health / player_mc.max_health)
         h_text = '#'*int(h_count*20)
         d_text = '-'*(20-int(h_count*20))
-        self.health_display.config(text=f"{h_text}{d_text}")
+        heathbarWindow.health_display.config(text=f"{h_text}{d_text}")
 
 
 class mainWindow:
@@ -94,15 +94,19 @@ class attackWindow:
         if roll_to_hit > player_mc.min_accuracy:
             current_enemies[enemy_index].health -= int(player_mc.attack_dmg[attack_index]) - targeted_enemy.armor
             tk.Label(self.fighting_window, text=f"You attacked for {player_mc.attack_dmg[attack_index]}").pack()
+            if(current_enemies[enemy_index].health <= 0):
+                tk.Label(self.fighting_window, text=f"{targeted_enemy.type} was defeated")
+                current_enemies
             tk.Label(self.fighting_window, text=f"{targeted_enemy.type} has {current_enemies[enemy_index].health} left").pack()
         else:
             tk.Label(self.fighting_window, text=f"You missed with your {player_mc.attack_name[attack_index]}").pack()
 
         #This calls the being_attacked() function. It's no longer a window because 
         # that was too many windows.
-        attcked_text = tk.Label(self.fighting_window, text= self.being_attacked_window()).pack()
+        for enemy in current_enemies:
+            tk.Label(self.fighting_window, text= self.being_attacked_window(enemy)).pack()
 
-    def being_attacked_window(self) -> str:
+    def being_attacked_window(self, enemy) -> str:
         """This is where the player takes damage.
 
         Returns:
@@ -110,16 +114,15 @@ class attackWindow:
         """
         health_bar = heathbarWindow()
 
-        for i, enemy in enumerate(current_enemies):
-            roll_to_hit = random.randint(1, 20)
-            pick_attack = random.randint(1, len(current_enemies[i].attack_name))
-            if roll_to_hit > enemy.accuracy:
-                attacked_for = enemy.attack_dmg[pick_attack] - player_mc.armor
-                player_mc.health -= attacked_for
-                health_bar.update_healthbar()
-                return f"{enemy.type} attacked you for {attacked_for}"
-            else:
-                return f"{enemy.type} attacked you with {pick_attack} but missed"
+        roll_to_hit = random.randint(1, 20)
+        pick_attack = random.randint(1, len(enemy.attack_name))
+        if roll_to_hit > enemy.accuracy:
+            attacked_for = enemy.attack_dmg[pick_attack] - player_mc.armor
+            player_mc.health -= attacked_for
+            health_bar.update_healthbar()
+            return f"{enemy.type} attacked you for {attacked_for}"
+        else:
+            return f"{enemy.type} attacked you with {pick_attack} but missed"
 
         
 
